@@ -54,6 +54,11 @@
     <key>NSAppTransportSecurity</key>
     <dict>
     <key>NSAllowsArbitraryLoads</key>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<dict>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Upload images for screen background</string>
+</dict>
     <true/>
     </dict>
 </dict>

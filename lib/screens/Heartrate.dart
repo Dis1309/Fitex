@@ -1,14 +1,17 @@
 import 'dart:async';
 //import 'package:FITNESS/main.dart';
 import 'package:camera/camera.dart';
+import 'package:fitex/screens/bpm.dart';
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+//import 'package:wakelock/wakelock.dart';
 import 'chart.dart';
-import 'package:heart_bpm/heart_bpm.dart';
+//import 'package:heart_bpm/heart_bpm.dart' as bmp;
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:screen_recorder/screen_recorder.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:image_picker/image_picker.dart';
 //import 'package:flutter_video/camera_page.dart';
+import 'camera.dart';
 
 class Heart extends StatefulWidget {
   Heart({super.key,required this.cameras});
@@ -25,14 +28,21 @@ class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
   late Future<void> _initializeControllerFuture;
   late Timer _timer; var gif;
   int start =15;
+  late PickedFile _imageFile;var  file;
+  dynamic _pickImageError;
+  bool isVideo = false;
+  late String file_url;
   ScreenRecorderController scontrol = ScreenRecorderController(pixelRatio: 0.5,
     skipFramesBetweenCaptures: 2,);
   bool get canexport => scontrol.exporter.hasFrames;
+  
+  get path => null;
   void startTimer(){
     const sec = Duration(seconds: 1);
+    stre();
     _timer =  Timer.periodic(sec, (Timer timer) {
-      if(start == 0){setState((){timer.cancel();scontrol.stop();
-      g();
+      //_onImageButtonPressed(ImageSource.camera);
+      if(start == 0){setState((){timer.cancel();y();
       });}
       else {if(t==false){timer.cancel();start++;}
         {setState((){start--;});};
@@ -47,9 +57,11 @@ class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
   void initState(){
     super.initState();
     control = CameraController(widget.cameras[0], ResolutionPreset.max);
-    _initializeControllerFuture = control.initialize();
+    _initializeControllerFuture = ino();
   }
-
+  ino() async {
+await control.initialize();
+  }
   @override
   void dispose(){
     super.dispose();
@@ -94,7 +106,7 @@ class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
                 ),
                 Positioned(
                   top: (size.width+size.height)/10,left: (size.width+size.height)/13,
-                  child: Text('Click to check Heart rate\n\n\n#IMPORTANT\n-Place finger on camera and flash\n-Timer stops in 15s',
+                  child: Text('Click to check Heart rate\n\n\n#IMPORTANT\n-Place finger on camera and flash\n-Upload 15s Video here.',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: (size.width+size.height)/80,
@@ -143,7 +155,7 @@ class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
                     setState(() {
                     t=!t;
                   });
-                  t?{startTimer(),scontrol.start()}:{setState((){start=15;})};},
+                  t?{Navigator.pushNamed(context,'/fourth')}:{setState((){start=15;})};},
                   onChanges: (change) {},
                   height: (size.width+size.height)/45,
                   width: (size.width+size.height)/10,
@@ -174,64 +186,91 @@ class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
           ],
         ),
         ),
-      t?actualrecorder(size):CameraPreview(control),
+      CameraPreview(control),
       Text('BPM VALUE',
             textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: (size.width+size.height)/100,
                   ),),
-      nw?hv():Text('0',
-            textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: (size.width+size.height)/100,
-                  ),),
-      ],
+      // Text(path,
+      //       textAlign: TextAlign.left,
+      //             style: TextStyle(
+      //               color: Colors.white,
+      //               fontSize: (size.width+size.height)/100,
+      //             ),),
+      ], 
     );
     
   }
-  Widget actualrecorder(var size){
-      return ScreenRecorder(
-  width: (size.width+size.height)/5, height: (size.width+size.height)/8,
-  background: Colors.white,
-  controller: scontrol,
-        child:CameraPreview(control), 
+//   Widget actualrecorder(var size){
+//       return ScreenRecorder(
+//   width: (size.width+size.height)/5, height: (size.width+size.height)/8,
+//   background: Colors.white,
+//   controller: scontrol,
+//         child:CameraPreview(control), 
   
-   // child which should be recorded
-);
- }
- Widget hv(){
-  return Container();
- }
-    // stre() async {
+//    // child which should be recorded
+// );
+ //}
+ 
+  // void _onImageButtonPressed(ImageSource source) async {
+  // XFile? tempfile = await ImagePicker().pickVideo(
+  //       source: ImageSource.camera);
+        
+  
+    //_uploadFile(tempfile.path);
+    // print("here is the Video link $file_url");
+    // setState(() {
+    //   file_url = tempfile.path;
+    //   print("here is the Video link $file_url");
+    // });
+    //Text('$tempfile');
+    //await _playVideo(file);
+  //}
+
+ 
+    stre() async {
       
-    //   if(rec){
-    //     final file = await control.stopVideoRecording();
-    //     setState(() {
-    //       start =15;
-    //     },);
-    //     AnimatedButton(
-    //               animatedOn: AnimatedOn.onHover,
-    //               onPress:  () async {
+    
+         file = await control.stopVideoRecording();
+        setState(() {
+          start =15;
+    },);
+        AnimatedButton(
+                  animatedOn: AnimatedOn.onHover,
+                  onPress:  () async {
                       
-    //                 },
-    //               onChanges: (change) {},
-    //               height: 50,
-    //               width: 50,
-    //               text: 'Export',
-    //               isReverse: true,
-    //               selectedTextColor: Colors.black,
-    //               transitionType: TransitionType.LEFT_TOP_ROUNDER,
-    //               backgroundColor: Colors.black,
-    //               selectedBackgroundColor: Color.fromARGB(255, 53, 216, 216),
-    //               borderColor: Colors.white,
-    //               borderWidth: 1,
-    //             );
-    //     t = false;
-    //   }else {
-    //    await control.prepareForVideoRecording();
-    //    await control.startVideoRecording();
-    //   }
-    // }
+                    },
+                  onChanges: (change) {},
+                  height: 50,
+                  width: 50,
+                  text: 'Export',
+                  isReverse: true,
+                  selectedTextColor: Colors.black,
+                  transitionType: TransitionType.LEFT_TOP_ROUNDER,
+                  backgroundColor: Colors.black,
+                  selectedBackgroundColor: Color.fromARGB(255, 53, 216, 216),
+                  borderColor: Colors.white,
+                  borderWidth: 1,
+                );
+        t = false;
+    }
+    y()async {
+       await control.prepareForVideoRecording();
+       await control.startVideoRecording();
+       
+    }
+    // hn(){
+    //   FutureBuilder<Bpm>(builder: ((context, snapshot) {
+    //     if(snapshot.hasData){
+    //       return Text('${snapshot.data!.avg_bpm}');
+    //     }
+    //     else if(snapshot.hasError){
+    //       return Text('${snapshot.error}');
+    //     }
+    //     return const CircularProgressIndicator();
+    //   }));
+    //   Text(url);
+    //}
 }

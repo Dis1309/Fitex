@@ -65,7 +65,7 @@ class _ChooseState extends State<Choose> with SingleTickerProviderStateMixin {
                           Bounce(
                         duration: Duration(milliseconds: 110),
                         onPressed: () {
-                          const Text("hel");
+                          Navigator.pushNamed(context, '/third');
                         },
                         child:SlideTransition(
       position: anime(1.5,1.5),

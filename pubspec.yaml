@@ -38,16 +38,27 @@ dependencies:
   simple_icons: ^7.10.0
   indexed: ^0.0.8
   fitbitter: ^2.0.1
-  heart_bpm: ^1.1.1+0
+  #heart_bpm: ^1.1.1+0
   charts_flutter: ^0.12.0
-  wakelock: ^0.6.2
-  camera: ^0.9.4+5
+  #wakelock: ^0.6.2
+  camera: ^0.9.4+11
   video_player: ^2.2.6
   screen_recorder: ^0.2.0
   flutter_animated_button: ^2.0.3
+  image_picker: ^0.8.7+1
+  path_provider: ^2.0.14
+  flutter_camera: ^0.1.1
+  http: ^0.13.4
+  firebase_core: ^2.9.0
+  firebase_storage: ^11.1.0
+  #xfile: ^1.1.0
+  #image_picker_platform_interface: ^2.6.1
+  #plugin_platform_interface: ^2.1.4 <=1.0.1
+  #path_provider_platform_interface: ^1.0.1
+  #plugin_platform_interface: ^1.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.5
 
 dev_dependencies:
   flutter_test:
