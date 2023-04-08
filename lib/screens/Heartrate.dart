@@ -23,7 +23,7 @@ class Heart extends StatefulWidget {
 }
 
 class Heartstate extends State<Heart> with SingleTickerProviderStateMixin {
-  bool hello = true; bool t = false;bool exporting = false;bool nw = false;
+  bool hello = false; bool t = false;bool exporting = false;bool nw = false;
   late CameraController control;
   late Future<void> _initializeControllerFuture;
   late Timer _timer; var gif;
@@ -170,7 +170,9 @@ await control.initialize();
                 ),
                 AnimatedButton(
                   animatedOn: AnimatedOn.onHover,
-                  onPress: () {},
+                  onPress: () {setState(() {
+                    hello=!hello;
+                  });},
                   onChanges: (change) {},
                   height: (size.width+size.height)/45,
                   width: (size.width+size.height)/10,
@@ -272,5 +274,5 @@ await control.initialize();
     //     return const CircularProgressIndicator();
     //   }));
     //   Text(url);
-    //}
+    // }
 }

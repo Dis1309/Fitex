@@ -21,7 +21,7 @@ class _ChooseState extends State<Choose> with SingleTickerProviderStateMixin {
   void initState(){
     super.initState();
     animationController = AnimationController(vsync: this,
-    duration: Duration(seconds: 10));
+    duration: Duration(seconds: 2));
     anime(1.5,1.5);
     delayedStart();
   }

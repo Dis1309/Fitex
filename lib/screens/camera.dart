@@ -13,9 +13,16 @@ import 'package:fitex/screens/firebase_options.dart';
 import 'package:image_picker/image_picker.dart';
 import 'upload.dart' as d;
 
-Future<Bpm> bpm(String link) async {
+Future<Bpm> bpm(dynamic link) async {
    final response = await http.get(
-    Uri.parse('https://heart-rate-07.herokuapp.com/api?query=$link'),);
+    Uri.parse('https://heart-rate-07.herokuapp.com/api?query=$link'),
+    headers: {
+  "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+  "Access-Control-Allow-Credentials": 'true', // Required for cookies, authorization headers with HTTPS
+  "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+  "Access-Control-Allow-Methods": "GET, HEAD"
+},
+    );
     if(response.statusCode == 200){
       return Bpm.fromJson(jsonDecode(response.body));
     }else {
@@ -73,9 +80,11 @@ class Camera extends StatefulWidget{
 }
 
 class _CameraState extends State<Camera> {
-  @override 
+  
+    @override 
   bool t= true;
   Widget build(BuildContext context){
+    var size = MediaQuery.of(context).size;
     return FlutterCamera(
       color: Colors.amber,
       onImageCaptured: (value) {
@@ -90,12 +99,15 @@ class _CameraState extends State<Camera> {
         
         String x = "test.mp4";
         String dst = '$path/$x';
-        upload(value,dst);
-        String u =y(path);
-        //bpm(u);
-        if(path!='0'){
-          return showDialog(context: context, builder: (context)=>AlertDialog(content: Text('$u'),));
-        }
+        dynamic u =upload(value,dst);
+        //y(path);
+        bpm(u);
+      //   
+      if(path!='0'){
+          
+          return showDialog<void>(context: context,builder:(BuildContext context){ return AlertDialog(content:Text('$u'));});
+        };
+        
         
         
         // setState(() {
@@ -108,13 +120,18 @@ class _CameraState extends State<Camera> {
     );
     // return Container();
   }
-  upload(dynamic f,String path) async {
-    final UploadTask uploadtask;
+  upload(XFile f,String path)  async{
+    dynamic uploadtask; Uint8List j = await o(f);String d;
      if(kIsWeb){
-       uploadtask = storage.ref(path).putData(await f.readAsBytes());
+       uploadtask = await storage.ref(path).putData(j);
      }else {
-       uploadtask = storage.ref(path).putFile(io.File(f.path));
+       uploadtask= await storage.ref(path).putFile(io.File(f.path));
      }
-     return uploadtask;
+      d = await storage.ref(path).getDownloadURL();
+     
+     return d;
+  }
+  Future<Uint8List> o(XFile f)async {
+    return await f.readAsBytes();
   }
 }
